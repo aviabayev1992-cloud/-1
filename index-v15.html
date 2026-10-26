@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f2b705">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="עוזי מנופים">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>עוזי מנופים סידור</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&family=Rubik:wght@500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#eceff0; --surface:#ffffff; --soft:#f3f5f6; --ink:#1b2227; --muted:#58646d; --line:#d2d8dc;
+  --accent:#f2b705; --accent-ink:#1b2227; --accent-soft:#fbe7a0;
+  --ok:#1d7a4b; --ok-bg:#dff1e6; --warn:#8f5600; --warn-bg:#fbefd2; --bad:#b42318;
+  --f-display:'Rubik',system-ui,sans-serif; --f-body:'Assistant',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ color-scheme:dark;
+    --bg:#13171a; --surface:#1c2226; --soft:#242c31; --ink:#e8ecee; --muted:#9aa6ae; --line:#2f383e;
+    --ok:#52c68a; --ok-bg:#183626; --warn:#f0a94f; --warn-bg:#3a2c12; --bad:#f48175; --accent-soft:#4d3d08; }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-bottom:calc(40px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:760px;margin:0 auto}
+header.top{position:sticky;top:0;z-index:9;background:var(--surface);border-bottom:1px solid var(--line);
+  margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));
+  padding:calc(10px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+header.top .in{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand b{font-family:var(--f-display);font-weight:600;font-size:1.15rem;display:block;line-height:1.2}
+.brand span{color:var(--muted);font-size:.85rem}
+.tabs{display:flex;background:var(--soft);border-radius:10px;padding:3px;gap:2px}
+.tabs button{border:0;background:transparent;color:var(--muted);font:600 .95rem var(--f-body);padding:8px 16px;border-radius:8px;min-height:40px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.datebar{display:flex;align-items:center;gap:8px;margin:16px 0 4px}
+.datebar .d{flex:1;text-align:center;font-family:var(--f-display);font-weight:500;font-size:1.1rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:9px;border:1px solid var(--line);
+  background:var(--surface);color:var(--ink);font:600 .95rem var(--f-body);cursor:pointer;text-decoration:none}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.small{min-height:38px;padding:0 12px;font-size:.88rem}
+.btn.danger{color:var(--bad)}
+.btn[disabled]{opacity:.55;cursor:default}
+.icon{min-width:44px;padding:0}
+.banner{background:var(--warn-bg);color:var(--warn);border-radius:9px;padding:10px 12px;margin:12px 0;font-size:.95rem}
+.summary{margin:10px 0 14px;color:var(--muted);font-size:.95rem;display:flex;flex-wrap:wrap;gap:4px 14px}
+.summary b{color:var(--ink);font-family:var(--f-display);font-weight:600}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+form.new{padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin-bottom:16px}
+form.new .full{grid-column:1/-1}
+form.new h2{margin:0;font-family:var(--f-display);font-size:1.05rem;font-weight:600}
+form.new label,.login label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted);font-weight:600;min-width:0}
+input,select,textarea{font:400 1rem var(--f-body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:44px;width:100%;min-width:0}
+textarea{min-height:64px;resize:vertical}
+input[type=time],input[type=tel],input[type=email],input[type=password]{direction:ltr;text-align:right}
+.login{max-width:420px;margin:12vh auto 0;padding:20px;display:grid;gap:14px}
+.login h1{margin:0;font-family:var(--f-display);font-weight:600;font-size:1.4rem}
+.login p{margin:0;color:var(--muted)}
+.err{color:var(--bad);font-weight:600;min-height:1.4em}
+.drv{margin:0 0 18px}
+.drv > header{display:flex;align-items:baseline;gap:8px;margin:0 2px 8px;flex-wrap:wrap}
+.drv h2{margin:0;font-family:var(--f-display);font-size:1.05rem;font-weight:600}
+.veh{color:var(--muted);font-size:.88rem}
+.none{color:var(--muted);font-size:.92rem;padding:10px 12px;border:1px dashed var(--line);border-radius:10px}
+.jobs{display:grid;gap:10px}
+.job{padding:14px;display:grid;gap:10px}
+.job .row1{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.time{font-family:var(--f-display);font-weight:600;font-size:1.45rem;direction:ltr;unicode-bidi:isolate;line-height:1.1}
+.time small{font-size:.8rem;color:var(--muted);font-weight:500;margin-inline-start:6px}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--muted)}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}
+.pill.warn{background:var(--warn-bg);color:var(--warn)}
+dl.f{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:.98rem}
+dl.f dt{color:var(--muted);font-size:.85rem;font-weight:600;padding-top:2px}
+dl.f dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+a{color:inherit}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.thumb{width:56px;height:56px;border-radius:8px;object-fit:cover;border:1px solid var(--line);cursor:pointer;background:var(--soft)}
+.picker{margin:12px 0 4px;font-family:var(--f-display);font-weight:500;font-size:1.05rem}
+.big{min-height:52px;font-size:1.05rem;flex:1 1 200px}
+.okbar{background:var(--ok-bg);color:var(--ok);border-radius:9px;padding:10px 12px;margin:12px 0;font-size:.95rem;font-weight:600}
+.yearbar{display:flex;align-items:center;gap:8px;margin:16px 0 12px}
+.yearbar b{flex:1;text-align:center;font-family:var(--f-display);font-weight:600;font-size:1.3rem}
+.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:.85rem;margin:0 0 12px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-inline-end:5px}
+.months{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.month{padding:12px}
+.month h3{margin:0 0 8px;font-family:var(--f-display);font-weight:600;font-size:1rem}
+.dow,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.dow span{text-align:center;color:var(--muted);font-size:.75rem;font-weight:600;padding-bottom:2px}
+.dc{position:relative;min-height:38px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--ink);font:500 .9rem var(--f-body);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0;cursor:pointer}
+.dc.off{visibility:hidden;cursor:default}
+.dc small{font-size:.65rem;color:var(--muted);line-height:1}
+.dc.has{background:var(--accent-soft);font-weight:700}
+.dc.wait{border-color:var(--warn)}
+.dc.today{outline:2px solid var(--accent-ink);outline-offset:-2px}
+.install{position:fixed;inset-inline:0;bottom:0;z-index:35;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface);border-top:1px solid var(--line);
+  padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:0 -2px 8px rgba(0,0,0,.12)}
+.install span{flex:1 1 200px;font-size:.92rem}
+.sec{font-family:var(--f-display);font-weight:600;font-size:1.15rem;margin:24px 2px 10px}
+.empty{text-align:center;color:var(--muted);padding:36px 12px}
+.empty b{display:block;color:var(--ink);font-family:var(--f-display);font-weight:600;margin-bottom:4px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;flex-wrap:wrap}
+.overlay{position:fixed;inset:0;z-index:30;background:rgba(10,14,17,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.overlay img{max-width:100%;max-height:78vh;border-radius:8px;background:#fff}
+.overlay .cap{color:#e8ecee;font-size:.95rem;text-align:center}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--ink);color:var(--bg);
+  padding:10px 16px;border-radius:10px;font-weight:600;max-width:90vw;text-align:center}
+html[dir="ltr"] .datebar,html[dir="ltr"] .yearbar{flex-direction:row-reverse}
+html[dir="ltr"] input[type=time],html[dir="ltr"] input[type=tel],html[dir="ltr"] input[type=email],html[dir="ltr"] input[type=password]{text-align:left}
+@media (min-width:900px){
+ body.mgr .wrap,body.mgr header.top .in{max-width:1280px}
+ body.mgr .cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px;align-items:start}
+ body.mgr .cols .drv{margin:0}
+ body.mgr form.new{grid-template-columns:repeat(4,1fr)}
+ body.mgr .summary{font-size:1.05rem}
+ body.mgr .datebar{justify-content:center;gap:16px}
+ body.mgr .datebar .d{flex:0 1 auto;min-width:280px;text-align:center}
+}
+@media (max-width:480px){ form.new{grid-template-columns:1fr} .tabs button{padding:8px 12px} }
+</style>
+<script>
+if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+window.__errs=[];
+addEventListener('error',function(e){window.__errs.push(e.message||'error')});
+addEventListener('unhandledrejection',function(e){window.__errs.push(String((e.reason&&e.reason.message)||e.reason))});
+setTimeout(function(){
+  var r=document.getElementById('root');
+  if(!r.querySelector('.login,.wrap')){
+    r.textContent='';
+    var d=document.createElement('div'); d.className='login card'; d.dir='ltr';
+    d.textContent='App failed to load. '+window.__errs.join(' | ');
+    r.appendChild(d);
+  }
+},6000);
+</script>
+</head>
+<body>
+<div id="root"><p style="text-align:center;margin-top:30vh;color:var(--muted)">…</p></div>
+<div id="layer"></div>
+
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,createUserWithEmailAndPassword}
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+import {getFirestore,collection,doc,addDoc,setDoc,updateDoc,deleteDoc,getDoc,getDocs,query,where,onSnapshot}
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+/* ====== להשלמה לפני העלאה ====== */
+const firebaseConfig={
+  apiKey:"AIzaSyCMVrNlP-2Wjj4j-1--N-Nm6oMbUH2UHdU",
+  authDomain:"uzi-manofim.firebaseapp.com",
+  projectId:"uzi-manofim",
+  storageBucket:"uzi-manofim.firebasestorage.app",
+  messagingSenderId:"425633549458",
+  appId:"1:425633549458:web:aaacd90c91d44e82316a4b"
+};
+const MANAGER_EMAIL="aviabayev1992@gmail.com";
+/* =============================== */
+
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const parse=s=>{const a=s.split('-').map(Number);return new Date(a[0],a[1]-1,a[2])};
+const addDays=(s,n)=>{const d=parse(s);d.setDate(d.getDate()+n);return ymd(d)};
+const today=ymd(new Date());
+const fmtDate=s=>parse(s).toLocaleDateString(LANGS[LANG].locale,{weekday:'long',day:'numeric',month:'long'});
+const hhmm=iso=>{const d=new Date(iso);return pad(d.getHours())+':'+pad(d.getMinutes())};
+const jobsWord=n=>{
+  if(LANG==='en') return n===1?'1 job':n+' jobs';
+  if(LANG==='ru'){ const a=n%10,b=n%100; return n+' '+((a===1&&b!==11)?'работа':(a>=2&&a<=4&&(b<10||b>=20))?'работы':'работ'); }
+  return n===1?'עבודה אחת':n+' עבודות';
+};
+const phoneEmail=p=>p.replace(/\D/g,'')+'@drivers.uzi-manofim.app';
+const userEmail=u=>u.toLowerCase().replace(/[^a-z0-9._-]/g,'')+'@managers.uzi-manofim.app';
+const sorted=a=>a.slice().sort((x,y)=>(x.reportTime||'').localeCompare(y.reportTime||''));
+
+function h(tag,props,...kids){
+  const e=document.createElement(tag);
+  for(const [k,v] of Object.entries(props||{})){
+    if(v==null||v===false)continue;
+    if(k==='class')e.className=v;
+    else if(k.startsWith('on'))e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k,v===true?'':v);
+  }
+  for(const kid of kids.flat(Infinity)){ if(kid==null||kid===false)continue; e.append(kid.nodeType?kid:document.createTextNode(kid)); }
+  return e;
+}
+function toast(msg){ const t=h('div',{class:'toast',role:'status'},msg); document.body.append(t); setTimeout(()=>t.remove(),3500); }
+const root=document.getElementById('root');
+
+/* ---------- languages: Hebrew, Russian, English (managers always see Hebrew) ---------- */
+const LANGS={he:{label:'עברית',dir:'rtl',locale:'he-IL'},ru:{label:'Русский',dir:'ltr',locale:'ru-RU'},en:{label:'English',dir:'ltr',locale:'en-GB'}};
+const T={
+he:{appName:'עוזי מנופים',appSub:'סידור עבודה',tabSchedule:'סידור',tabCalendar:'שנה',logout:'יציאה',
+ loginUser:'מספר טלפון (נהג) או שם משתמש (מנהל)',loginPhone:'מספר טלפון',loginPass:'סיסמה',loginBtn:'כניסה',errNet:'אין חיבור לאינטרנט',errLogin:'שם משתמש או סיסמה שגויים',
+ today:'היום',todayPrefix:'היום, ',tomorrowPrefix:'מחר, ',upcoming:'העבודות הקרובות',prevDay:'היום הקודם',nextDay:'היום הבא',
+ hello:(n,v)=>'שלום '+n+' · '+v,loadingSchedule:'טוען סידור...',noUpcoming:'אין לך עבודות קרובות',noUpcomingHint:'כשהמנהל ישייך לך עבודה היא תופיע כאן.',
+ noJobOn:d=>'אין לך עבודה ב'+d,noJobOnHint:'אפשר לדפדף בין הימים עם החצים, או לפתוח את לשונית "שנה".',
+ needConfirm:'יש עבודה שממתינה לאישור שלך',reportEnd:'התייצבות / סיום',
+ fCustomer:'לקוח',fTask:'עבודה',fLocation:'מיקום',navigate:'ניווט',fPhone:'טלפון לקוח',call:'חיוג',fNotes:'הערות',
+ youConfirmed:tm=>'אישרת קבלה ב־'+tm,confirmBtn:'אישרתי קבלת סידור',confirmSent:'האישור נשלח למנהל',
+ sending:'שולח תעודה...',takePhoto:'צלם תעודת עבודה',replacePhoto:'החלף תמונה של התעודה',viewDoc:'צפה בתעודה',
+ docSentAt:tm=>'התעודה נשלחה למנהל ב־'+tm,docSent:'התעודה נשלחה למנהל',sendFail:'השליחה נכשלה, נסה שוב',
+ loadingDoc:'טוען תעודה...',noPhoto:'התמונה לא נמצאה',close:'סגור',docAlt:'תעודת עבודה',sentWord:'נשלח',
+ newJob:'נוספה לך עבודה חדשה',dbLost:'החיבור לנתונים נקטע, טען מחדש',noPerm:'אין הרשאה לפעולה הזו',actFail:'הפעולה נכשלה, נסה שוב',
+ nextYear:'שנה הבאה',prevYear:'שנה קודמת',refresh:'רענן',legendHas:'יש עבודות (המספר הוא כמה)',legendWaitDrv:'עוד לא אישרת',legendWaitMgr:'יש מי שעוד לא אישר',calFail:'לא ניתן לטעון את היומן',
+ install:'התקנה',installPrompt:'אפשר להתקין את האפליקציה על הטלפון',installBtn:'התקן',
+ installInApp:'כדי להתקין, פתח את הקישור בדפדפן (Chrome באנדרואיד, Safari באייפון)',installIos:'להתקנה: לחץ על כפתור השיתוף (ריבוע עם חץ) ואז על "הוסף למסך הבית"',tech:'מידע טכני'},
+en:{appName:'Uzi Manofim',appSub:'Work schedule',tabSchedule:'Schedule',tabCalendar:'Calendar',logout:'Log out',
+ loginUser:'Phone number (driver) or username (manager)',loginPhone:'Phone number',loginPass:'Password',loginBtn:'Log in',errNet:'No internet connection',errLogin:'Wrong username or password',
+ today:'Today',todayPrefix:'Today, ',tomorrowPrefix:'Tomorrow, ',upcoming:'Upcoming jobs',prevDay:'Previous day',nextDay:'Next day',
+ hello:(n,v)=>'Hello '+n+' · '+v,loadingSchedule:'Loading schedule...',noUpcoming:'You have no upcoming jobs',noUpcomingHint:'When the manager assigns you a job, it will appear here.',
+ noJobOn:d=>'No job on '+d,noJobOnHint:'Use the arrows to browse days, or open the Calendar tab.',
+ needConfirm:'A job is waiting for your confirmation',reportEnd:'Report / End',
+ fCustomer:'Customer',fTask:'Job',fLocation:'Location',navigate:'Navigate',fPhone:'Customer phone',call:'Call',fNotes:'Notes',
+ youConfirmed:tm=>'You confirmed at '+tm,confirmBtn:'I received the schedule',confirmSent:'Confirmation sent to the manager',
+ sending:'Sending work order...',takePhoto:'Photograph the work order',replacePhoto:'Replace work order photo',viewDoc:'View work order',
+ docSentAt:tm=>'Work order sent to the manager at '+tm,docSent:'Work order sent to the manager',sendFail:'Sending failed, try again',
+ loadingDoc:'Loading work order...',noPhoto:'Photo not found',close:'Close',docAlt:'Work order',sentWord:'sent',
+ newJob:'A new job was added for you',dbLost:'Connection lost, please reload',noPerm:'You do not have permission for this action',actFail:'Action failed, try again',
+ nextYear:'Next year',prevYear:'Previous year',refresh:'Refresh',legendHas:'Has jobs (the number shows how many)',legendWaitDrv:'Not confirmed yet',legendWaitMgr:'Someone has not confirmed',calFail:'Could not load the calendar',
+ install:'Install',installPrompt:'You can install the app on your phone',installBtn:'Install',
+ installInApp:'To install, open the link in your browser (Chrome on Android, Safari on iPhone)',installIos:'To install: tap the Share button (square with an arrow), then "Add to Home Screen"',tech:'Technical info'},
+ru:{appName:'Узи Манофим',appSub:'Расписание работ',tabSchedule:'Расписание',tabCalendar:'Календарь',logout:'Выйти',
+ loginUser:'Номер телефона (водитель) или имя пользователя (менеджер)',loginPhone:'Номер телефона',loginPass:'Пароль',loginBtn:'Войти',errNet:'Нет подключения к интернету',errLogin:'Неверное имя пользователя или пароль',
+ today:'Сегодня',todayPrefix:'Сегодня, ',tomorrowPrefix:'Завтра, ',upcoming:'Ближайшие работы',prevDay:'Предыдущий день',nextDay:'Следующий день',
+ hello:(n,v)=>'Здравствуйте, '+n+' · '+v,loadingSchedule:'Загрузка расписания...',noUpcoming:'У вас нет ближайших работ',noUpcomingHint:'Когда менеджер назначит вам работу, она появится здесь.',
+ noJobOn:d=>'Нет работы на '+d,noJobOnHint:'Листайте дни стрелками или откройте вкладку «Календарь».',
+ needConfirm:'Есть работа, ожидающая вашего подтверждения',reportEnd:'Явка / Окончание',
+ fCustomer:'Клиент',fTask:'Работа',fLocation:'Адрес',navigate:'Маршрут',fPhone:'Телефон клиента',call:'Позвонить',fNotes:'Примечания',
+ youConfirmed:tm=>'Вы подтвердили получение в '+tm,confirmBtn:'Я получил расписание',confirmSent:'Подтверждение отправлено менеджеру',
+ sending:'Отправка наряда...',takePhoto:'Сфотографировать наряд',replacePhoto:'Заменить фото наряда',viewDoc:'Посмотреть наряд',
+ docSentAt:tm=>'Наряд отправлен менеджеру в '+tm,docSent:'Наряд отправлен менеджеру',sendFail:'Не удалось отправить, попробуйте ещё раз',
+ loadingDoc:'Загрузка наряда...',noPhoto:'Фото не найдено',close:'Закрыть',docAlt:'Наряд',sentWord:'отправлено',
+ newJob:'Вам назначена новая работа',dbLost:'Соединение потеряно, перезагрузите страницу',noPerm:'Нет прав на это действие',actFail:'Не удалось выполнить, попробуйте ещё раз',
+ nextYear:'Следующий год',prevYear:'Предыдущий год',refresh:'Обновить',legendHas:'Есть работы (число — сколько)',legendWaitDrv:'Ещё не подтверждено',legendWaitMgr:'Кто-то ещё не подтвердил',calFail:'Не удалось загрузить календарь',
+ install:'Установка',installPrompt:'Приложение можно установить на телефон',installBtn:'Установить',
+ installInApp:'Чтобы установить, откройте ссылку в браузере (Chrome на Android, Safari на iPhone)',installIos:'Для установки: нажмите кнопку «Поделиться» (квадрат со стрелкой), затем «На экран “Домой”»',tech:'Техническая информация'}
+};
+let LANG='he';
+const savedLang=()=>{ try{ const l=localStorage.getItem('lang'); if(LANGS[l]) return l; }catch(e){} return 'he'; };
+function applyLang(l){ LANG=LANGS[l]?l:'he'; document.documentElement.lang=LANG; document.documentElement.dir=LANGS[LANG].dir; }
+const t=(k,...a)=>{ const v=(T[LANG]&&T[LANG][k]!==undefined)?T[LANG][k]:T.he[k]; return typeof v==='function'?v(...a):v; };
+let refreshInstall=()=>{};
+function chooseLang(l){
+  try{ localStorage.setItem('lang',l); }catch(e){}
+  applyLang(l);
+  if(S.user) render();
+  else { const u=document.getElementById('u'),p=document.getElementById('p'); const uv=u?u.value:'',pv=p?p.value:''; showLogin(); const u2=document.getElementById('u'),p2=document.getElementById('p'); if(u2)u2.value=uv; if(p2)p2.value=pv; }
+  refreshInstall();
+}
+function langSelect(id){
+  const sel=h('select',{id,'aria-label':'Language / שפה / Язык',style:'width:auto;min-height:38px;padding:6px 8px',onchange:ev=>chooseLang(ev.target.value)},
+    Object.entries(LANGS).map(([k,v])=>h('option',{value:k},v.label)));
+  sel.value=LANG; return sel;
+}
+applyLang(savedLang());
+
+/* ---------- install banner: Android install button, iPhone instructions ---------- */
+(function(){
+  const standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  if(standalone) return;
+  try{ if(localStorage.getItem('noInstall')==='1') return; }catch(e){}
+  const ua=navigator.userAgent;
+  const ios=/iPhone|iPad|iPod/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const inApp=/FBAN|FBAV|Instagram|Line\/|; wv\)/i.test(ua);
+  let deferred=null, mode=null;
+  const msg=h('span',{});
+  const act=h('button',{class:'btn small primary',type:'button',hidden:true,onclick:async()=>{ try{ deferred.prompt(); await deferred.userChoice; }catch(_){} deferred=null; mode=null; paint(); }});
+  const closeBtn=h('button',{class:'btn small',type:'button',onclick:()=>{bar.hidden=true;try{localStorage.setItem('noInstall','1');}catch(e){}}},'✕');
+  const bar=h('div',{class:'install',hidden:true,role:'region'},msg,act,closeBtn);
+  document.body.append(bar);
+  function paint(){
+    if(!mode){ bar.hidden=true; return; }
+    bar.setAttribute('aria-label',t('install')); closeBtn.setAttribute('aria-label',t('close'));
+    if(mode==='prompt'){ msg.textContent=t('installPrompt'); act.textContent=t('installBtn'); act.hidden=false; }
+    else { msg.textContent=t(mode==='inapp'?'installInApp':'installIos'); act.hidden=true; }
+    bar.hidden=false;
+  }
+  refreshInstall=paint;
+  addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferred=e; mode='prompt'; paint(); });
+  addEventListener('appinstalled',()=>{ mode=null; paint(); });
+  if(inApp){ mode='inapp'; paint(); } else if(ios){ mode='ios'; paint(); }
+})();
+
+
+if(firebaseConfig.apiKey.startsWith('PASTE')||MANAGER_EMAIL.startsWith('PASTE')){
+  root.append(h('div',{class:'login card'},h('h1',{},'האפליקציה עוד לא הוגדרה'),h('p',{},'צריך להדביק בקובץ את הגדרות Firebase ואת כתובת המייל של המנהל.')));
+  throw new Error('config missing');
+}
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+const S={user:null,isMgr:false,view:'board',date:today,jobs:[],drivers:[],myDriver:null,ready:false,formOpen:false,busy:{},isOwner:false,managers:[],upcoming:true,mine:[],dbErr:null,relink:null,pack:null,packing:false,year:new Date().getFullYear(),yearData:null,yearLoading:false};
+let unsubs=[];
+const stopAll=()=>{unsubs.forEach(u=>u());unsubs=[];};
+let jobsUnsub=null;
+const withDocs=s=>s.docs.map(d=>({id:d.id,...d.data()}));
+
+async function run(p,okMsg){
+  try{ await p; if(okMsg) toast(okMsg); return true; }
+  catch(e){ console.error(e); toast(e&&e.code==='permission-denied'?t('noPerm'):t('actFail')); return false; }
+}
+
+/* ---------- login ---------- */
+function showLogin(){
+  applyLang(savedLang());
+  stopAll(); if(jobsUnsub){jobsUnsub();jobsUnsub=null;}
+  const err=h('div',{class:'err',role:'alert'});
+  const u=h('input',{id:'u',type:'text',autocomplete:'username',autocapitalize:'none',inputmode:'email',required:true,placeholder:t('loginPhone')});
+  const p=h('input',{id:'p',type:'password',autocomplete:'current-password',required:true});
+  const btn=h('button',{class:'btn primary',type:'submit'},t('loginBtn'));
+  root.replaceChildren(h('form',{class:'login card',onsubmit:async ev=>{
+    ev.preventDefault(); err.textContent=''; btn.disabled=true;
+    const name=u.value.trim(); const email=name.includes('@')?name:(/^[\d\s+()-]+$/.test(name)?phoneEmail(name):userEmail(name));
+    try{ await signInWithEmailAndPassword(auth,email,p.value); }
+    catch(e){ err.textContent=(e.code==='auth/network-request-failed')?t('errNet'):t('errLogin'); }
+    btn.disabled=false;
+  }},
+    h('div',{style:'display:flex;justify-content:flex-end'},langSelect('langLogin')),
+    h('h1',{},t('appName')),h('p',{},t('appSub')),
+    h('label',{for:'u'},t('loginUser'),u),
+    h('label',{for:'p'},t('loginPass'),p),err,btn));
+}
+
+/* ---------- data ---------- */
+let prevJobs=null;
+function watchJobs(){
+  if(jobsUnsub){jobsUnsub();jobsUnsub=null;}
+  S.ready=false; prevJobs=null; S.pack=null;
+  const q=S.isMgr
+    ?query(collection(db,'jobs'),where('date','==',S.date))
+    :query(collection(db,'jobs'),where('driverUid','==',S.user.uid));
+  jobsUnsub=onSnapshot(q,s=>{
+    const list=withDocs(s);
+    if(prevJobs){
+      list.forEach(j=>{
+        const old=prevJobs.get(j.id);
+        const who=(S.drivers.find(d=>d.id===j.driverId)||{}).name||'נהג';
+        if(S.isMgr){
+          if(old&&!old.confirmedAt&&j.confirmedAt) toast(who+' אישר קבלת סידור');
+          if(old&&!old.photoAt&&j.photoAt) toast('התקבלה תעודה מ'+who);
+        }else if(!old){ toast(t('newJob')); }
+      });
+    }
+    prevJobs=new Map(list.map(j=>[j.id,j]));
+    S.dbErr=null;
+    if(S.isMgr) S.jobs=list; else { S.mine=list; deriveMine(); }
+    S.ready=true; render();
+  },e=>{ S.dbErr=(e&&(e.code||e.message))||'unknown'; S.ready=true; toast(t('dbLost')); render(); });
+}
+async function startSession(user){
+  const email=(user.email||'').toLowerCase();
+  const owner=email===MANAGER_EMAIL.toLowerCase();
+  let mgr=owner;
+  if(!mgr){ try{ mgr=(await getDoc(doc(db,'managers',email))).exists(); }catch(e){ mgr=false; } }
+  if(!auth.currentUser||auth.currentUser.uid!==user.uid) return;
+  S.user=user; S.isOwner=owner; S.isMgr=mgr; S.managers=[];
+  applyLang(mgr?'he':savedLang());
+  S.view='board'; S.date=today; S.upcoming=true; S.mine=[]; S.jobs=[]; S.drivers=[]; S.myDriver=null; S.yearData=null; S.pack=null;
+  if(S.isMgr){
+    unsubs.push(onSnapshot(collection(db,'managers'),s=>{S.managers=withDocs(s).sort((a,b)=>(a.email||'').localeCompare(b.email||''));render();},()=>{}));
+    unsubs.push(onSnapshot(collection(db,'drivers'),s=>{S.drivers=withDocs(s).sort((a,b)=>a.name.localeCompare(b.name,'he'));render();},()=>toast('לא ניתן לטעון נהגים')));
+  }else{
+    unsubs.push(onSnapshot(query(collection(db,'drivers'),where('uid','==',user.uid)),s=>{S.myDriver=withDocs(s)[0]||null;render();}));
+  }
+  watchJobs(); render();
+}
+function deriveMine(){ S.jobs=S.upcoming?S.mine.filter(j=>j.date>=today):S.mine.filter(j=>j.date===S.date); }
+function setDate(d,up){
+  S.date=d; S.upcoming=!!up;
+  if(S.isMgr){ S.jobs=[]; watchJobs(); } else deriveMine();
+  render();
+}
+
+/* ---------- photos ---------- */
+async function shrink(file,max,q,limit){
+  const url=URL.createObjectURL(file);
+  const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=url;});
+  const sc=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));
+  const c=document.createElement('canvas'); c.width=Math.round(img.naturalWidth*sc); c.height=Math.round(img.naturalHeight*sc);
+  c.getContext('2d').drawImage(img,0,0,c.width,c.height); URL.revokeObjectURL(url);
+  let out=c.toDataURL('image/jpeg',q);
+  while(out.length>limit&&q>0.3){q-=0.1;out=c.toDataURL('image/jpeg',q);}
+  return out;
+}
+async function sendPhoto(job,file){
+  if(!file)return;
+  S.busy[job.id]=true; render();
+  try{
+    const data=await shrink(file,1200,0.65,220000);
+    await setDoc(doc(db,'photos',job.id),{data,driverUid:S.user.uid});
+    await updateDoc(doc(db,'jobs',job.id),{photoAt:new Date().toISOString()});
+    toast(t('docSent'));
+  }catch(e){ console.error(e); toast(t('sendFail')); }
+  delete S.busy[job.id]; render();
+}
+async function showPhoto(job){
+  const layer=document.getElementById('layer'); const close=()=>layer.replaceChildren();
+  layer.replaceChildren(h('div',{class:'overlay',onclick:close},h('div',{class:'cap'},t('loadingDoc'))));
+  let data=null; try{ const s=await getDoc(doc(db,'photos',job.id)); data=s.exists()?s.data().data:null; }catch(e){}
+  const drv=S.drivers.find(d=>d.id===job.driverId);
+  const cap=(drv?drv.name+' · ':'')+(job.customer||'')+(job.photoAt?' · '+t('sentWord')+' '+hhmm(job.photoAt):'');
+  layer.replaceChildren(h('div',{class:'overlay',onclick:close},
+    data?h('img',{src:data,alt:t('docAlt')}):h('div',{class:'cap'},t('noPhoto')),
+    h('div',{class:'cap'},cap),h('button',{class:'btn',type:'button',onclick:close},t('close'))));
+}
+
+/* ---------- shared pieces ---------- */
+const timeBlock=j=>h('div',{class:'time'},(j.reportTime||'--:--')+' – '+(j.endTime||'--:--'),h('small',{},t('reportEnd')));
+function fields(j){
+  const rows=[];
+  if(j.customer) rows.push([t('fCustomer'),j.customer]);
+  if(j.task) rows.push([t('fTask'),j.task]);
+  if(j.location) rows.push([t('fLocation'),h('span',{},j.location,' ',h('a',{href:'https://waze.com/ul?q='+encodeURIComponent(j.location)+'&navigate=yes',target:'_blank',rel:'noopener'},t('navigate')))]);
+  if(j.phone) rows.push([t('fPhone'),h('span',{},h('span',{class:'ltr'},j.phone),' ',h('a',{href:'tel:'+j.phone.replace(/[^\d+]/g,'')},t('call')))]);
+  if(j.notes) rows.push([t('fNotes'),j.notes]);
+  return h('dl',{class:'f'},rows.map(r=>[h('dt',{},r[0]),h('dd',{},r[1])]));
+}
+const statusPills=j=>h('div',{class:'pills'},
+  j.confirmedAt?h('span',{class:'pill ok'},'אישר קבלה '+hhmm(j.confirmedAt)):h('span',{class:'pill warn'},'ממתין לאישור'),
+  j.photoAt?h('span',{class:'pill ok'},'תעודה התקבלה '+hhmm(j.photoAt)):h('span',{class:'pill'},'ממתין לתעודה'));
+const field=(id,label,el,full)=>{el.id=id;return h('label',{for:id,class:full?'full':''},label,el);};
+
+/* ---------- manager: add job form (built once so typing survives updates) ---------- */
+const jf={};
+const jobForm=h('form',{class:'card new',hidden:true,onsubmit:async ev=>{
+  ev.preventDefault();
+  const drv=S.drivers.find(d=>d.id===jf.driver.value); if(!drv)return;
+  const job={date:S.date,driverId:drv.id,driverUid:drv.uid,reportTime:jf.start.value,endTime:jf.end.value,customer:jf.customer.value.trim(),
+    phone:jf.phone.value.trim(),location:jf.loc.value.trim(),task:jf.task.value.trim(),notes:jf.notes.value.trim(),createdAt:new Date().toISOString()};
+  if(await run(addDoc(collection(db,'jobs'),job),'העבודה נוספה לסידור')){
+    ['customer','phone','loc','task','notes'].forEach(k=>jf[k].value=''); S.formOpen=false; render();
+  }
+}},
+  h('h2',{class:'full'},'עבודה חדשה'),
+  (jf.driver=h('select',{required:true}),field('jDriver','נהג',jf.driver,true)),
+  (jf.start=h('input',{type:'time',required:true,value:'07:00'}),field('jStart','שעת התייצבות',jf.start)),
+  (jf.end=h('input',{type:'time',value:'17:00'}),field('jEnd','שעת סיום',jf.end)),
+  (jf.customer=h('input',{type:'text',autocomplete:'off'}),field('jCustomer','שם הלקוח',jf.customer)),
+  (jf.phone=h('input',{type:'tel',inputmode:'tel',autocomplete:'off'}),field('jPhone','טלפון הלקוח',jf.phone)),
+  (jf.loc=h('input',{type:'text',required:true,autocomplete:'off',placeholder:'כתובת או שם אתר'}),field('jLoc','מיקום',jf.loc,true)),
+  (jf.task=h('textarea',{}),field('jTask','מה לעשות',jf.task,true)),
+  (jf.notes=h('input',{type:'text',autocomplete:'off'}),field('jNotes','הערות לנהג',jf.notes,true)),
+  h('div',{class:'acts full'},h('button',{class:'btn primary',type:'submit'},'הוסף לסידור'),
+    h('button',{class:'btn',type:'button',onclick:()=>{S.formOpen=false;render();}},'ביטול')));
+
+function fillDriverSelect(){
+  const cur=jf.driver.value;
+  jf.driver.replaceChildren(...S.drivers.map(d=>h('option',{value:d.id},d.name+' · '+d.vehicle)));
+  if(cur) jf.driver.value=cur;
+}
+
+function mgrJob(j){
+  return h('article',{class:'card job'},
+    h('div',{class:'row1'},timeBlock(j),statusPills(j)),fields(j),
+    h('div',{class:'acts'},
+      j.photoAt?h('button',{class:'btn small',type:'button',onclick:()=>showPhoto(j)},'פתח תעודה'):null,
+      h('button',{class:'btn small',type:'button',onclick:()=>{
+        const {id,confirmedAt,photoAt,thumb,...rest}=j;
+        run(addDoc(collection(db,'jobs'),{...rest,date:addDays(S.date,1),createdAt:new Date().toISOString()}),'הועתק ל'+fmtDate(addDays(S.date,1)));
+      }},'שכפל למחר'),
+      h('button',{class:'btn small danger',type:'button',onclick:ev=>{
+        const b=ev.currentTarget;
+        if(b.dataset.armed){ run((async()=>{ await deleteDoc(doc(db,'jobs',j.id)); try{await deleteDoc(doc(db,'photos',j.id));}catch(e){} })(),'העבודה נמחקה'); return; }
+        b.dataset.armed='1'; b.textContent='לחץ שוב למחיקה'; setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='מחק';}},3000);
+      }},'מחק')));
+}
+function boardView(){
+  const jobs=S.jobs, conf=jobs.filter(j=>j.confirmedAt).length, docs=jobs.filter(j=>j.photoAt).length;
+  fillDriverSelect(); jobForm.hidden=!S.formOpen;
+  const out=[
+    h('p',{class:'summary'},h('span',{},h('b',{},jobsWord(jobs.length))),h('span',{},h('b',{},conf),' אישרו קבלה'),h('span',{},h('b',{},docs),' תעודות התקבלו')),
+    S.drivers.length
+      ?h('div',{class:'toolbar'},h('button',{class:'btn primary',type:'button',onclick:()=>{S.formOpen=!S.formOpen;render();}},S.formOpen?'סגור טופס':'הוסף עבודה'))
+      :h('div',{class:'banner'},'עוד אין נהגים. עבור ללשונית "נהגים" והוסף את הנהגים כדי לרשום להם עבודות.'),
+    jobForm];
+  if(jobs.length){
+    const waiting=S.drivers.filter(d=>jobs.some(j=>j.driverId===d.id&&!j.confirmedAt));
+    out.splice(2,0,waiting.length
+      ?h('div',{class:'banner',role:'status'},'עוד לא אישרו קבלה: '+waiting.map(d=>d.name).join(', '))
+      :h('div',{class:'okbar'},'כל הנהגים אישרו קבלת סידור'));
+  }
+  const pb=packBox(); if(pb) out.splice(out.length-1,0,h('div',{class:'toolbar'},pb));
+  if(S.ready&&!jobs.length&&!S.formOpen&&S.drivers.length) out.push(h('div',{class:'empty card'},h('b',{},'אין עבודות ב'+fmtDate(S.date)),'לחץ על "הוסף עבודה" כדי לרשום את הסידור ליום הזה.'));
+  const cols=[]; out.push(h('div',{class:'cols'},cols));
+  S.drivers.forEach(d=>{
+    const mine=sorted(jobs.filter(j=>j.driverId===d.id));
+    cols.push(h('section',{class:'drv'},
+      h('header',{},h('h2',{},d.name),h('span',{class:'veh'},d.vehicle),h('span',{class:'veh'},'· '+(mine.length?jobsWord(mine.length):'פנוי'))),
+      mine.length?h('div',{class:'jobs'},mine.map(mgrJob)):(jobs.length?h('div',{class:'none'},'אין עבודה ליום הזה'):null)));
+  });
+  return out;
+}
+
+/* ---------- manager: send the day's work orders by email (via the phone's share sheet) ---------- */
+async function preparePack(){
+  S.packing=true; render();
+  try{
+    const out=[]; let i=0;
+    for(const j of S.jobs.filter(j=>j.photoAt)){
+      const snap=await getDoc(doc(db,'photos',j.id)); if(!snap.exists())continue;
+      const blob=await (await fetch(snap.data().data)).blob();
+      const drv=S.drivers.find(d=>d.id===j.driverId);
+      i++;
+      const name=((drv?drv.name:'נהג')+'-'+(j.customer||'עבודה')+'-'+j.date+'-'+i+'.jpg').replace(/[\\/:*?"<>|]+/g,'_');
+      const file=new File([blob],name,{type:'image/jpeg'});
+      out.push({file,name,url:URL.createObjectURL(file)});
+    }
+    S.pack=out;
+  }catch(e){ console.error(e); toast('ההכנה נכשלה, נסה שוב'); }
+  S.packing=false; render();
+}
+async function sharePack(){
+  try{ await navigator.share({files:S.pack.map(p=>p.file),title:'תעודות עבודה '+fmtDate(S.date)}); }
+  catch(e){ if(e&&e.name!=='AbortError') toast('השיתוף נכשל'); }
+}
+function packBox(){
+  const n=S.jobs.filter(j=>j.photoAt).length;
+  if(!n) return null;
+  if(!S.pack) return h('button',{class:'btn',type:'button',disabled:S.packing,onclick:preparePack},S.packing?'מכין תעודות...':'הכן '+n+' תעודות לשליחה במייל');
+  if(!S.pack.length) return h('span',{class:'veh'},'לא נמצאו תמונות');
+  const can=!!(navigator.canShare&&navigator.share&&navigator.canShare({files:S.pack.map(p=>p.file)}));
+  return h('div',{class:'acts'},
+    can?h('button',{class:'btn primary',type:'button',onclick:sharePack},'שתף '+S.pack.length+' תעודות (בחר Gmail)')
+       :S.pack.map(p=>h('a',{class:'btn small',href:p.url,download:p.name},'הורד '+p.name)));
+}
+
+/* ---------- manager: year calendar ---------- */
+const DOWS={he:['א','ב','ג','ד','ה','ו','ש'],ru:['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],en:['Su','Mo','Tu','We','Th','Fr','Sa']};
+const monthName=(y,m)=>{ const x=new Date(y,m,1).toLocaleDateString(LANGS[LANG].locale,{month:'long'}); return x.charAt(0).toUpperCase()+x.slice(1); };
+async function loadYear(force){
+  if(!force&&S.yearData&&S.yearData.year===S.year){render();return;}
+  S.yearLoading=true; render();
+  try{
+    const y=S.year;
+    const q=S.isMgr
+      ?query(collection(db,'jobs'),where('date','>=',y+'-01-01'),where('date','<=',y+'-12-31'))
+      :query(collection(db,'jobs'),where('driverUid','==',S.user.uid));
+    const snap=await getDocs(q);
+    const days={};
+    snap.forEach(d=>{ const j=d.data(); if(!j.date||j.date.slice(0,4)!==String(y))return; const o=days[j.date]||(days[j.date]={n:0,wait:0}); o.n++; if(!j.confirmedAt)o.wait++; });
+    S.yearData={year:y,days};
+  }catch(e){ console.error(e); toast(t('calFail')); }
+  S.yearLoading=false; render();
+}
+function yearView(){
+  const y=S.year, data=(S.yearData&&S.yearData.year===y)?S.yearData.days:{};
+  const out=[
+    h('div',{class:'yearbar'},
+      h('button',{class:'btn icon',type:'button','aria-label':t('nextYear'),onclick:()=>{S.year++;loadYear();}},'›'),
+      h('b',{},String(y)),
+      h('button',{class:'btn icon',type:'button','aria-label':t('prevYear'),onclick:()=>{S.year--;loadYear();}},'‹'),
+      h('button',{class:'btn small',type:'button',disabled:S.yearLoading,onclick:()=>loadYear(true)},S.yearLoading?'…':t('refresh'))),
+    h('p',{class:'legend'},h('span',{},h('i',{style:'background:var(--accent-soft)'}),t('legendHas')),h('span',{},h('i',{style:'border:2px solid var(--warn)'}),S.isMgr?t('legendWaitMgr'):t('legendWaitDrv')))];
+  const grid=h('div',{class:'months'});
+  for(let m=0;m<12;m++){
+    const first=new Date(y,m,1), count=new Date(y,m+1,0).getDate(), cells=[];
+    for(let i=0;i<first.getDay();i++) cells.push(h('span',{class:'dc off'}));
+    for(let d=1;d<=count;d++){
+      const ds=y+'-'+pad(m+1)+'-'+pad(d), info=data[ds];
+      cells.push(h('button',{type:'button',class:'dc'+(info?' has':'')+(info&&info.wait?' wait':'')+(ds===today?' today':''),
+        'aria-label':fmtDate(ds)+(info?', '+jobsWord(info.n):''),onclick:()=>{S.view='board';setDate(ds);}},
+        h('span',{},String(d)),info?h('small',{},String(info.n)):null));
+    }
+    grid.append(h('section',{class:'month card'},h('h3',{},monthName(y,m)),h('div',{class:'dow'},DOWS[LANG].map(x=>h('span',{},x))),h('div',{class:'days'},cells)));
+  }
+  out.push(grid);
+  return out;
+}
+
+/* ---------- manager: managers list ---------- */
+const mf={};
+const managerForm=h('form',{class:'card new',onsubmit:async ev=>{
+  ev.preventDefault();
+  const username=mf.email.value.trim().toLowerCase(), pw=mf.pw.value;
+  if(!/^[a-z0-9._-]{3,}$/.test(username)||!/[a-z]/.test(username)){toast('שם משתמש: לפחות 3 תווים באנגלית, אפשר גם מספרים. חייבת להיות בו לפחות אות אחת');return;}
+  const email=userEmail(username);
+  if(pw.length<6){toast('הסיסמה חייבת להיות לפחות 6 תווים');return;}
+  const btn=ev.submitter; if(btn)btn.disabled=true;
+  try{
+    const app2=initializeApp(firebaseConfig,'second-'+Date.now());
+    const auth2=getAuth(app2);
+    let existed=false;
+    try{ await createUserWithEmailAndPassword(auth2,email,pw); await signOut(auth2); }
+    catch(e){ if(e.code==='auth/email-already-in-use') existed=true; else throw e; }
+    await setDoc(doc(db,'managers',email),{email,username,addedAt:new Date().toISOString()});
+    mf.email.value=''; mf.pw.value='';
+    toast(existed?'שם המשתמש כבר היה רשום. נוספה לו הרשאת ניהול, והסיסמה שלו נשארה כמו שהייתה':'המנהל נוסף. הוא נכנס עם שם המשתמש והסיסמה');
+  }catch(e){ console.error(e); toast(e&&e.code==='permission-denied'?'רק הבעלים יכול להוסיף מנהלים':'ההוספה נכשלה'); }
+  if(btn)btn.disabled=false;
+}},
+  h('h2',{class:'full'},'מנהל חדש'),
+  (mf.email=h('input',{type:'text',required:true,autocomplete:'off',autocapitalize:'none',spellcheck:'false',placeholder:'למשל dan.cohen'}),field('mEmail','שם משתמש באנגלית',mf.email,true)),
+  (mf.pw=h('input',{type:'text',required:true,minlength:'6',autocomplete:'off'}),field('mPw','סיסמה (לפחות 6 תווים)',mf.pw,true)),
+  h('div',{class:'full'},h('button',{class:'btn primary',type:'submit'},'הוסף מנהל')));
+function managersSection(){
+  const out=[h('h2',{class:'sec'},'מנהלים')];
+  if(S.isOwner) out.push(managerForm);
+  out.push(h('div',{class:'jobs'},
+    h('div',{class:'card row'},h('div',{},h('b',{},'בעלים'),' ',h('span',{class:'veh ltr'},MANAGER_EMAIL))),
+    S.managers.map(m=>h('div',{class:'card row'},
+      h('div',{},h('b',{},'מנהל'),' ',h('span',{class:'veh ltr'},m.username||m.email)),
+      S.isOwner?h('button',{class:'btn small danger',type:'button',onclick:ev=>{
+        const b=ev.currentTarget;
+        if(b.dataset.armed){ run(deleteDoc(doc(db,'managers',m.id)),'הרשאת הניהול הוסרה'); return; }
+        b.dataset.armed='1'; b.textContent='לחץ שוב להסרה'; setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='הסר הרשאה';}},3000);
+      }},'הסר הרשאה'):null))));
+  out.push(h('p',{class:'veh'},S.isOwner
+    ?'מנהלים יכולים לעשות הכול חוץ מלהוסיף ולהסיר מנהלים. המנהל נכנס עם שם המשתמש והסיסמה שהגדרת. הסרת הרשאה לא מוחקת את הכניסה שלו. כדי לחסום אותו לגמרי מחק אותו גם ב-Firebase, בלשונית Authentication.'
+    :'רק הבעלים יכול להוסיף ולהסיר מנהלים.'));
+  return out;
+}
+
+/* ---------- manager: drivers tab ---------- */
+const df={};
+const driverForm=h('form',{class:'card new',onsubmit:async ev=>{
+  ev.preventDefault();
+  const name=df.name.value.trim(), vehicle=df.vehicle.value.trim(), phone=df.phone.value.replace(/\D/g,''), pw=df.pw.value;
+  if(pw.length<6){toast('הסיסמה חייבת להיות לפחות 6 תווים');return;}
+  const btn=ev.submitter; if(btn)btn.disabled=true;
+  try{
+    const app2=initializeApp(firebaseConfig,'second-'+Date.now());
+    const auth2=getAuth(app2);
+    let uid, created=true;
+    try{ const cred=await createUserWithEmailAndPassword(auth2,phoneEmail(phone),pw); uid=cred.user.uid; }
+    catch(e){
+      if(e.code!=='auth/email-already-in-use') throw e;
+      created=false;
+      const cred=await signInWithEmailAndPassword(auth2,phoneEmail(phone),pw); uid=cred.user.uid;
+    }
+    await signOut(auth2);
+    await addDoc(collection(db,'drivers'),{name,vehicle,phone,uid,createdAt:new Date().toISOString()});
+    ['name','vehicle','phone','pw'].forEach(k=>df[k].value='');
+    toast(created?'הנהג נוסף. הוא נכנס עם מספר הטלפון והסיסמה':'הכניסה של הטלפון הזה כבר הייתה קיימת, והנהג קושר אליה');
+  }catch(e){ console.error(e);
+    toast((e.code==='auth/invalid-credential'||e.code==='auth/wrong-password')?'מספר הטלפון הזה כבר רשום עם סיסמה אחרת. הקלד את הסיסמה הנוכחית שלו':'ההוספה נכשלה'); }
+  if(btn)btn.disabled=false;
+}},
+  h('h2',{class:'full'},'נהג חדש'),
+  (df.name=h('input',{type:'text',required:true,autocomplete:'off'}),field('dName','שם',df.name)),
+  (df.vehicle=h('input',{type:'text',required:true,autocomplete:'off',placeholder:'למשל מנוף סמי 100'}),field('dVeh','רכב',df.vehicle)),
+  (df.phone=h('input',{type:'tel',inputmode:'tel',required:true,autocomplete:'off'}),field('dPhone','טלפון (שם המשתמש של הנהג)',df.phone)),
+  (df.pw=h('input',{type:'text',required:true,minlength:'6',autocomplete:'off'}),field('dPw','סיסמה לנהג (לפחות 6 תווים)',df.pw)),
+  h('div',{class:'full'},h('button',{class:'btn primary',type:'submit'},'הוסף נהג')));
+/* ---------- manager: re-link a driver to the current login ---------- */
+const relinkPw=h('input',{id:'rpw',type:'text',autocomplete:'off',placeholder:'הסיסמה הנוכחית של הנהג',style:'max-width:240px'});
+async function relinkDriver(d,pw){
+  try{
+    const app2=initializeApp(firebaseConfig,'relink-'+Date.now());
+    const auth2=getAuth(app2);
+    const cred=await signInWithEmailAndPassword(auth2,phoneEmail(d.phone),pw);
+    await signOut(auth2);
+    const uid=cred.user.uid, old=d.uid;
+    if(uid===old){ toast('הנהג כבר מקושר נכון'); S.relink=null; render(); return; }
+    await updateDoc(doc(db,'drivers',d.id),{uid});
+    let n=0;
+    for(const col of ['jobs','photos']){
+      const snap=await getDocs(query(collection(db,col),where('driverUid','==',old)));
+      for(const x of snap.docs){ await updateDoc(x.ref,{driverUid:uid}); if(col==='jobs')n++; }
+    }
+    S.relink=null; toast('הנהג קושר מחדש. עודכנו '+n+' עבודות'); render();
+  }catch(e){ console.error(e);
+    toast((e&&(e.code==='auth/invalid-credential'||e.code==='auth/wrong-password'||e.code==='auth/user-not-found'))?'הסיסמה לא נכונה, או שאין כניסה למספר הזה':'הקישור נכשל, נסה שוב'); }
+}
+function relinkBox(d){
+  if(S.relink!==d.id) return h('div',{style:'margin-top:6px'},h('button',{class:'btn small',type:'button',onclick:()=>{S.relink=d.id;relinkPw.value='';render();}},'קשר מחדש'));
+  return h('div',{class:'acts',style:'margin-top:8px'},relinkPw,
+    h('button',{class:'btn small primary',type:'button',onclick:()=>{ if(relinkPw.value.length>=6) relinkDriver(d,relinkPw.value); else toast('כתוב את הסיסמה הנוכחית של הנהג'); }},'אשר'),
+    h('button',{class:'btn small',type:'button',onclick:()=>{S.relink=null;render();}},'ביטול'));
+}
+function driversView(){
+  return [h('h2',{class:'sec',style:'margin-top:8px'},'נהגים'),driverForm,
+    h('div',{class:'jobs'},S.drivers.length?S.drivers.map(d=>h('div',{class:'card row'},
+      h('div',{},h('b',{},d.name),' ',h('span',{class:'veh'},d.vehicle+' · '),h('span',{class:'veh ltr'},d.phone),relinkBox(d)),
+      h('button',{class:'btn small danger',type:'button',onclick:ev=>{
+        const b=ev.currentTarget;
+        if(b.dataset.armed){ run(deleteDoc(doc(db,'drivers',d.id)),'הנהג הוסר מהרשימה'); return; }
+        b.dataset.armed='1'; b.textContent='לחץ שוב להסרה'; setTimeout(()=>{if(b.isConnected){delete b.dataset.armed;b.textContent='הסר';}},3000);
+      }},'הסר'))):h('div',{class:'none'},'עוד אין נהגים ברשימה.')),
+    h('p',{class:'veh'},'הסרה מהרשימה לא מוחקת את הכניסה של הנהג. כדי לחסום כניסה מחק אותו גם ב-Firebase, בלשונית Authentication. אם נהג נכנס אבל לא רואה עבודות, לחץ אצלו "קשר מחדש" והקלד את הסיסמה שהוא נכנס איתה.')];
+}
+function teamView(){ return managersSection(); }
+
+/* ---------- driver view ---------- */
+function driverJob(j){
+  const photoBtn=S.busy[j.id]
+    ?h('button',{class:'btn big',type:'button',disabled:true},t('sending'))
+    :h('label',{class:'btn big'+(j.photoAt?'':' primary'),for:'cam-'+j.id},j.photoAt?t('replacePhoto'):t('takePhoto'),
+        h('input',{id:'cam-'+j.id,type:'file',accept:'image/*',capture:'environment',hidden:true,onchange:ev=>sendPhoto(j,ev.target.files[0])}));
+  return h('article',{class:'card job'},
+    h('div',{class:'row1'},timeBlock(j)),fields(j),
+    j.confirmedAt
+      ?h('div',{class:'pills'},h('span',{class:'pill ok'},t('youConfirmed',hhmm(j.confirmedAt))))
+      :h('button',{class:'btn primary big',type:'button',onclick:()=>run(updateDoc(doc(db,'jobs',j.id),{confirmedAt:new Date().toISOString()}),t('confirmSent'))},t('confirmBtn')),
+    h('div',{class:'acts'},photoBtn,j.photoAt?h('button',{class:'btn small',type:'button',onclick:()=>showPhoto(j)},t('viewDoc')):null),
+    j.photoAt?h('div',{class:'pills'},h('span',{class:'pill ok'},t('docSentAt',hhmm(j.photoAt)))):null);
+}
+function driverView(){
+  const list=S.jobs.slice().sort((a,b)=>((a.date||'')+(a.reportTime||'')).localeCompare((b.date||'')+(b.reportTime||'')));
+  const out=[h('div',{class:'picker'},S.myDriver?t('hello',S.myDriver.name,S.myDriver.vehicle):'')];
+  if(!S.ready) out.push(h('div',{class:'empty'},t('loadingSchedule')));
+  else if(!list.length) out.push(h('div',{class:'empty card'},
+    h('b',{},S.upcoming?t('noUpcoming'):t('noJobOn',fmtDate(S.date))),
+    S.upcoming?t('noUpcomingHint'):t('noJobOnHint')));
+  else{
+    if(list.some(j=>!j.confirmedAt)) out.push(h('div',{class:'banner',role:'status'},t('needConfirm')));
+    const days=[]; list.forEach(j=>{ let g=days.find(x=>x.date===j.date); if(!g){ g={date:j.date,jobs:[]}; days.push(g); } g.jobs.push(j); });
+    days.forEach(g=>out.push(
+      h('h2',{class:'sec',style:'margin:18px 2px 8px'},(g.date===today?t('todayPrefix'):g.date===addDays(today,1)?t('tomorrowPrefix'):'')+fmtDate(g.date)),
+      h('div',{class:'jobs'},g.jobs.map(driverJob))));
+  }
+  out.push(h('details',{style:'margin-top:28px;color:var(--muted);font-size:.85rem'},h('summary',{},t('tech')),
+    h('div',{dir:'ltr',style:'text-align:left;overflow-wrap:anywhere;padding-top:6px'},
+      h('div',{},'login: '+(S.user.email||'')),
+      h('div',{},'uid: '+S.user.uid),
+      h('div',{},'driver record: '+(S.myDriver?S.myDriver.name+' (uid '+S.myDriver.uid+')':'NOT FOUND')),
+      h('div',{},'my jobs loaded: '+S.mine.length+(S.mine.length?' | dates: '+S.mine.map(j=>j.date).sort().slice(0,6).join(', '):'')),
+      h('div',{},'error: '+(S.dbErr||'none')))));
+  return out;
+}
+
+/* ---------- shell ---------- */
+const dateLbl=h('div',{class:'d'});
+const shell=h('div',{class:'wrap'});
+const main=h('main',{});
+const tabBoard=h('button',{type:'button',onclick:()=>{S.view='board';render();}});
+const tabYear=h('button',{type:'button',onclick:()=>{S.view='year';loadYear();}});
+const tabDrivers=h('button',{type:'button',onclick:()=>{S.view='drivers';render();}});
+const tabTeam=h('button',{type:'button',onclick:()=>{S.view='team';render();}});
+const brandName=h('b',{}), brandSub=h('span',{});
+const langHead=langSelect('langHead');
+const logoutBtn=h('button',{class:'btn small',type:'button',onclick:()=>signOut(auth)});
+const prevBtn=h('button',{class:'btn icon',type:'button',onclick:()=>setDate(addDays(S.date,-1))},'‹');
+const nextBtn=h('button',{class:'btn icon',type:'button',onclick:()=>setDate(addDays(S.date,1))},'›');
+const todayBtn=h('button',{class:'btn small',type:'button',onclick:()=>setDate(today,true)});
+shell.append(
+  h('header',{class:'top'},h('div',{class:'in'},
+    h('div',{class:'brand'},brandName,brandSub),
+    h('div',{class:'acts'},h('div',{class:'tabs',id:'tabs'},tabBoard,tabYear,tabDrivers,tabTeam),langHead,logoutBtn))),
+  h('div',{class:'datebar',id:'datebar'},nextBtn,dateLbl,prevBtn,todayBtn),
+  main);
+
+function render(){
+  if(!S.user)return;
+  if(!root.contains(shell)) root.replaceChildren(shell);
+  document.body.classList.toggle('mgr',!!S.isMgr);
+  document.getElementById('tabs').hidden=false;
+  brandName.textContent=t('appName'); brandSub.textContent=t('appSub');
+  tabBoard.textContent=t('tabSchedule'); tabYear.textContent=t('tabCalendar'); tabDrivers.textContent='נהגים'; tabTeam.textContent='צוות';
+  logoutBtn.textContent=t('logout'); todayBtn.textContent=t('today');
+  prevBtn.setAttribute('aria-label',t('prevDay')); nextBtn.setAttribute('aria-label',t('nextDay'));
+  langHead.value=LANG; langHead.hidden=S.isMgr;
+  if(S.view==='drivers'&&!S.isMgr) S.view='board';
+  if(S.view==='team'&&!S.isOwner) S.view='board';
+  tabDrivers.hidden=!S.isMgr; tabTeam.hidden=!S.isOwner;
+  tabTeam.setAttribute('aria-pressed',S.view==='team');
+  tabBoard.setAttribute('aria-pressed',S.view==='board'); tabYear.setAttribute('aria-pressed',S.view==='year'); tabDrivers.setAttribute('aria-pressed',S.view==='drivers');
+  const showDate=S.view==='board'; document.getElementById('datebar').hidden=!showDate;
+  dateLbl.textContent=(!S.isMgr&&S.upcoming)?t('upcoming'):(S.date===today?t('todayPrefix'):'')+fmtDate(S.date);
+  main.replaceChildren(...(S.view==='year'?yearView():(S.isMgr?(S.view==='drivers'?driversView():S.view==='team'?teamView():boardView()):driverView())));
+}
+
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&ymd(new Date())!==today) location.reload(); });
+
+onAuthStateChanged(auth,user=>{
+  if(user) startSession(user);
+  else { S.user=null; showLogin(); }
+});
+</script>
+</body>
+</html>
